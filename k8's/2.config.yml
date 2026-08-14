@@ -1,0 +1,10 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: config
+  namespace: project-2
+data:
+  MYSQL_DATABASE: "notesdb"
+  MYSQL_USER: "nithin"
+  MYSQL_PORT: "3306"
+  MYSQL_HOST: mysqldb-notes

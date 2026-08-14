@@ -1,0 +1,92 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+
+metadata:
+  name: project-2
+  namespace: argocd
+
+spec:
+  description: Production project for Notes Application
+
+  # Allowed Git repositories
+  sourceRepos:
+    - https://github.com/NithinGowda46/Project2-notesapp-devops.git 
+
+  # Allowed deployment destinations
+  destinations:
+    - namespace: project-2
+      server: https://kubernetes.default.svc
+
+  # Cluster-scoped resources allowed
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+
+    - group: ""
+      kind: PersistentVolume
+
+    - group: ""
+      kind: PersistentVolumeClaim
+
+    - group: storage.k8s.io
+      kind: StorageClass
+
+    - group: "*"      #for allowing all cluster-scoped resources, you can use the wildcard group and kind
+      kind: "*"
+
+  # Namespace-scoped resources allowed
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: ConfigMap
+
+    - group: ""
+      kind: Secret
+
+    - group: ""
+      kind: Service
+
+    - group: ""
+      kind: ServiceAccount
+
+    - group: ""
+      kind: PersistentVolumeClaim
+
+    - group: apps
+      kind: Deployment
+
+    - group: apps
+      kind: StatefulSet
+
+    - group: apps
+      kind: ReplicaSet
+
+    - group: apps
+      kind: DaemonSet
+
+    - group: apps
+      kind: Deployment
+
+    - group: networking.k8s.io
+      kind: Ingress
+
+    - group: autoscaling
+      kind: HorizontalPodAutoscaler
+
+    - group: autoscaling
+      kind: VerticalPodAutoscaler
+
+    - group: policy
+      kind: PodDisruptionBudget
+
+    - group: batch
+      kind: Job
+
+    - group: batch
+      kind: CronJob
+    
+    - group: "*"      #for allowing all namespace-scoped resources, you can use the wildcard group and kind
+      kind: "*"
+
+  # Warn about orphaned resources
+  orphanedResources:
+    warn: true

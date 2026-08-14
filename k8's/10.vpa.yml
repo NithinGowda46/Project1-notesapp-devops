@@ -1,0 +1,24 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: vpa
+  namespace: project-2
+spec: 
+  targetRef:
+    kind: Deployment
+    apiVersion: apps/v1
+    name: django-deployment
+  updatePolicy:
+    updateMode: "Off"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: "*"
+      controlledResources:
+      - cpu
+      - memory
+      minAllowed: 
+        cpu: "100m"
+        memory: "128Mi"
+      maxAllowed:
+       cpu: "500m"
+       memory: "512Mi"

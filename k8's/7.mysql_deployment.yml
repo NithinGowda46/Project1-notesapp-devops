@@ -1,0 +1,66 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: mysql-statefulset
+  namespace: project-2
+spec:
+  serviceName: mysqldb-notes
+  selector:
+    matchLabels:
+      app: notes-mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: notes-mysql
+    spec:
+      containers:
+        - name: mysql-container
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: config  
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: config
+                  key: MYSQL_HOST
+            - name: MYSQL_PORT
+              valueFrom:  
+                configMapKeyRef:
+                  name: config
+                  key: MYSQL_PORT
+          volumeMounts:
+            - name: project-2-mysql-pvc
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+        - metadata:
+            name: project-2-mysql-pvc
+            namespace: project-2
+          spec:
+            storageClassName: retain-storage
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 2Gi
+    

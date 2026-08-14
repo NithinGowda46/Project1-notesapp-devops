@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: notesapp          #name of the application
+  namespace: argocd  #namespace where the application will be deployed
+spec:
+  project: project-2    #name of the project where the application will be deployed
+  source:
+    repoURL: https://github.com/NithinGowda46/Project2-notesapp-devops.git   #URL of the git repository where the kubernetes manifests are stored
+    targetRevision: main   #branch of the git repository where the kubernetes manifests are stored
+    path: k8's             #path of the kubernetes manifests in the git repository
+  destination:
+    server: https://kubernetes.default.svc  #URL of the kubernetes cluster where the application will be deployed
+    namespace: project-2  #namespace where it gets created automatically if it does not exist
+  syncPolicy:
+    automated:
+      prune: true         #automatically delete resources that are no longer defined in the git repository
+      selfHeal: true      #automatically apply changes made to the git repository to the kubernetes cluster
+      allowEmpty: false   #dont allow the application to be deployed if the git repository is empty
+    syncOptions:
+      - CreateNamespace=true  #automatically create the namespace if it does not exist  
+      - ApplyOutOfSyncOnly=true  #only apply changes made to the git repository to the kubernetes cluster if the application is out of sync
+      - PruneLast=true  #automatically delete resources that are no longer defined in the git repository after the application is synced
+      - PrunePropagationPolicy=foreground  #automatically delete resources that are no longer defined in the git repository in the background
+
+      
