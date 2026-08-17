@@ -4,6 +4,7 @@ metadata:
   name: notesapp-ingress
   namespace: project-2
 spec:
+  ingressClassName: nginx
   rules:
   - http:
       paths:
