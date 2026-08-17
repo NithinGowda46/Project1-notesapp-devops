@@ -18,7 +18,7 @@ spec:
           image: busybox
           command: ['sh', '-c', 'until nc -z mysqldb-notes 3306; do echo waiting for db; sleep 2; done;']
         - name: migrate-database
-          image: nithingowda46/notes-app:27-back
+          image: nithingowda46/notes-app:33-back
           command: ['sh', '-c', 'python manage.py migrate']
           env:
           - name: MYSQL_DATABASE
@@ -48,7 +48,7 @@ spec:
                 key: MYSQL_PORT
       containers:
         - name: django-container
-          image: nithingowda46/notes-app:27-back
+          image: nithingowda46/notes-app:33-back
           ports:
             - containerPort: 8000
           env:
